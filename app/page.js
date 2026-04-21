@@ -54,7 +54,7 @@ export default async function HomePage() {
         lifetimeRolesCount={lifetimeRolesCount}
         hideContactBanner
       />
-      <section className="mx-auto w-full max-w-[1180px] px-4 py-10 sm:px-6 lg:px-8" aria-label="Next step" data-home-scroll>
+      <section className="mx-auto w-full max-w-[1120px] px-5 py-10 transition-[max-width] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] min-[1024px]:max-w-[min(1480px,calc(100vw_-_40px))]" aria-label="Next step" data-home-scroll>
         <div className="rounded-[8px] border border-[rgba(91,79,232,0.14)] bg-[#FFFFFF] px-5 py-7 text-center shadow-[0_16px_34px_rgba(28,28,26,0.05)] sm:px-6">
           <p className="m-0 text-xs font-black uppercase tracking-[0.12em] text-[#5B4FE8]">
             End of results
