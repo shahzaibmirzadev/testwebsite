@@ -1,0 +1,3 @@
+"company_name","provider","slug","status","source_url","promotion_source","notes","promotion_status","dedupe_detail","reason"
+"E2E Mercury (Probe)","ashby","mercury","auto","https://jobs.ashbyhq.com/mercury","prompt8_e2e","synthetic row for merge dry-run only","ready_new","no_company_name_collision","test_batch"
+"E2E Figma (Probe)","greenhouse","figma","auto","https://boards.greenhouse.io/figma","prompt8_e2e","synthetic row for merge dry-run only","ready_new","no_company_name_collision","test_batch"

@@ -1,0 +1,4 @@
+﻿"company_name","careers_url","source_type","extraction_status","jobs_found_count","html_promotion_status","promotion_status","reason","next_action"
+"Flyability","https://www.flyability.com/jobs","html_custom","jobs_found","1","eligible","ready","eligible:jobs=1;blocker=none","promote_to_registry"
+"Skydio","https://www.skydio.com/careers","html_custom","jobs_found","29","eligible","ready","eligible:jobs=29;blocker=none","promote_to_registry"
+"Wing","https://wing.com/careers","html_custom","jobs_found","1","eligible","ready","eligible:jobs=1;blocker=none","promote_to_registry"

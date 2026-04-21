@@ -1,0 +1,35 @@
+node_modules
+out
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.vercel
+logs/career-resolver.log
+
+# Build outputs
+dist/
+.env
+.env.*
+!.env.example
+# Next.js
+.next/
+
+# Logs
+*.log
+
+# Pipeline / generated data
+data/*.json
+data/**/*.json
+
+# Domain discovery: keep cache untracked; allow review/apply artifacts
+data/domain_discovery_cache.json
+!data/domain_discovery_candidates.json
+!data/domain_discovery_candidates.csv
+!data/domain_discovery_apply_report.json
+
+# Optional large seed files
+supabase_seed_parts/
+
+# OS / editor junk
+.DS_Store
+Thumbs.db

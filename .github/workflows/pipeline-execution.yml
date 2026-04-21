@@ -1,0 +1,146 @@
+# Manual full pipeline (resolver → extract → analyze → optional Supabase + publish).
+# Does not replace Daily Job Sync or other automation.
+
+name: Pipeline Execution
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "shadow = extract only (no Supabase sync/publish); primary = full pipeline-deploy"
+        required: true
+        type: choice
+        options:
+          - shadow
+          - primary
+      ats_max_companies:
+        description: "Optional — ATS_EXTRACT_MAX_COMPANIES (empty = default)"
+        required: false
+        type: string
+        default: ""
+      html_max_companies:
+        description: "Optional — HTML_EXTRACT_MAX_COMPANIES (empty = default)"
+        required: false
+        type: string
+        default: ""
+      resolver_max:
+        description: "Optional — RESOLVER_MAX (empty = default)"
+        required: false
+        type: string
+        default: ""
+      resolver_offset:
+        description: "Optional — RESOLVER_OFFSET (empty = default)"
+        required: false
+        type: string
+        default: ""
+      resolver_only_keys:
+        description: "Optional — RESOLVER_ONLY_KEYS comma-separated (empty = default)"
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pipeline-execution-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate Supabase secrets (primary only)
+        if: inputs.mode == 'primary'
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          node -e '
+          const url = process.env.SUPABASE_URL || "";
+          const key = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+          if (!url) {
+            console.error("Missing SUPABASE_URL secret (required for primary).");
+            process.exit(1);
+          }
+          if (!key) {
+            console.error("Missing SUPABASE_SERVICE_ROLE_KEY secret (required for primary).");
+            process.exit(1);
+          }
+          if (key.startsWith("sb_publishable_")) {
+            console.error("SUPABASE_SERVICE_ROLE_KEY is a publishable key, not a service-role key.");
+            process.exit(1);
+          }
+          if (key.startsWith("eyJ")) {
+            try {
+              const payload = JSON.parse(Buffer.from(key.split(".")[1], "base64url").toString("utf8"));
+              const role = String(payload.role || "").toLowerCase();
+              if (role !== "service_role") {
+                console.error("SUPABASE_SERVICE_ROLE_KEY jwt role is " + role + ", expected service_role.");
+                process.exit(1);
+              }
+            } catch (err) {
+              console.error("Could not decode SUPABASE_SERVICE_ROLE_KEY JWT payload:", err.message || err);
+              process.exit(1);
+            }
+          } else {
+            console.log("Non-JWT Supabase secret key detected; continuing.");
+          }
+          console.log("Supabase secrets OK for primary mode.");
+          '
+
+      - name: Prepare .env.local for pipeline npm scripts
+        env:
+          MODE: ${{ inputs.mode }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          if [ "$MODE" = "primary" ]; then
+            {
+              echo "SUPABASE_URL=$SUPABASE_URL"
+              echo "SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY"
+              echo "NEXT_PUBLIC_SUPABASE_URL=$SUPABASE_URL"
+            } > .env.local
+          else
+            touch .env.local
+          fi
+
+      - name: Run pipeline deploy
+        env:
+          ORCHESTRATOR_MODE: ${{ inputs.mode }}
+          ATS_EXTRACT_MAX_COMPANIES: ${{ inputs.ats_max_companies }}
+          HTML_EXTRACT_MAX_COMPANIES: ${{ inputs.html_max_companies }}
+          RESOLVER_MAX: ${{ inputs.resolver_max }}
+          RESOLVER_OFFSET: ${{ inputs.resolver_offset }}
+          RESOLVER_ONLY_KEYS: ${{ inputs.resolver_only_keys }}
+        run: npm run pipeline:deploy
+
+      - name: Upload pipeline artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-execution-${{ github.run_id }}
+          path: |
+            data/pipeline_deploy_report.latest.json
+            data/full_pipeline_decision_report.json
+            data/pipeline_analysis_report.json
+            data/jobs_db_ready.json
+            data/extracted_jobs_clean.json
+            data/summary_extract_html.json
+            data/summary_filter_jobs.json
+            data/summary_prepare_db.json
+          if-no-files-found: warn
+          retention-days: 14

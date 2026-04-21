@@ -1,0 +1,173 @@
+name: Daily Job Sync
+
+on:
+  schedule:
+    # Trigger around 09:00 and 21:00 Europe/Brussels across CET/CEST.
+    # Gate step below ensures only the correct local-time run executes.
+    - cron: "0 7 * * *"
+    - cron: "0 8 * * *"
+    - cron: "0 19 * * *"
+    - cron: "0 20 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-job-sync-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      run_now: ${{ steps.gate.outputs.run_now }}
+    steps:
+      - name: Run only at 09:00/21:00 Europe/Brussels (or manual dispatch)
+        id: gate
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "run_now=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          HOUR=$(TZ=Europe/Brussels date +%H)
+          MINUTE=$(TZ=Europe/Brussels date +%M)
+          MINUTE_NUM=$((10#$MINUTE))
+          echo "Brussels time gate check -> hour=$HOUR minute=$MINUTE"
+          if { [ "$HOUR" = "09" ] || [ "$HOUR" = "21" ]; } && [ "$MINUTE_NUM" -le 5 ]; then
+            echo "run_now=true" >> $GITHUB_OUTPUT
+          else
+            echo "run_now=false" >> $GITHUB_OUTPUT
+          fi
+
+  run-sync:
+    needs: gate
+    if: needs.gate.outputs.run_now == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate Supabase key wiring before scrape
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          node -e '
+          const url = process.env.SUPABASE_URL || "";
+          const key = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+          if (!url) {
+            console.error("Missing SUPABASE_URL secret.");
+            process.exit(1);
+          }
+          if (!key) {
+            console.error("Missing SUPABASE_SERVICE_ROLE_KEY secret.");
+            process.exit(1);
+          }
+          if (key.startsWith("sb_publishable_")) {
+            console.error("SUPABASE_SERVICE_ROLE_KEY is a publishable key, not a service-role key.");
+            process.exit(1);
+          }
+          if (key.startsWith("eyJ")) {
+            try {
+              const payload = JSON.parse(Buffer.from(key.split(".")[1], "base64url").toString("utf8"));
+              const role = String(payload.role || "").toLowerCase();
+              if (role !== "service_role") {
+                console.error(`SUPABASE_SERVICE_ROLE_KEY jwt role is '${role}', expected 'service_role'.`);
+                process.exit(1);
+              }
+            } catch (err) {
+              console.error("Could not decode SUPABASE_SERVICE_ROLE_KEY JWT payload:", err.message || err);
+              process.exit(1);
+            }
+          } else {
+            console.log("Non-JWT Supabase secret key detected; continuing.");
+          }
+          console.log("Supabase key wiring check passed.");
+          '
+
+      - name: Execute daily scrape
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          DAILY_SYNC_EXCLUDE_PROVIDERS: "workable"
+          ATS_RIPPLING_MAX_DETAIL_FETCHES: "25"
+          ATS_BAMBOOHR_MAX_DETAIL_FETCHES: "25"
+        run: node scripts/daily-sync.js
+
+      - name: Upload scrape checkpoint artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-sync-checkpoint
+          path: |
+            sources.csv
+            source_performance.csv
+          if-no-files-found: error
+          retention-days: 3
+
+  post-sync:
+    needs: [gate, run-sync]
+    if: needs.gate.outputs.run_now == 'true' && needs.run-sync.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Restore scrape checkpoint artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: daily-sync-checkpoint
+          path: .
+
+      - name: Validate apply links (deactivate stale jobs)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/validate-apply-links.mjs
+
+      - name: Refresh jobs master snapshot
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/refresh-jobs-master.mjs
+
+      - name: Validate source schema
+        run: node scripts/check-source-schema.mjs
+
+      - name: Generate ops health snapshot + alerts
+        run: node scripts/ops-health-check.mjs
+
+      - name: Validate live SEO (top jobs)
+        run: node scripts/validate-live-seo.mjs
+
+      - name: Commit snapshot updates
+        run: |
+          git add data/jobs-master.json data/ops-health.json data/seo-validation.json sources.csv source_performance.csv
+          if git diff --staged --quiet; then
+            echo "No snapshot/source changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Refresh jobs master snapshot and source metrics"
+          git push

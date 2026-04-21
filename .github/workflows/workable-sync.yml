@@ -1,0 +1,52 @@
+name: Weekly Workable Sync
+
+on:
+  schedule:
+    - cron: "30 1 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: workable-sync-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  run-workable:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Execute workable-only scrape
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          DAILY_SYNC_ONLY_PROVIDERS: "workable"
+          WORKABLE_INTER_SOURCE_DELAY_MS: "45000"
+          RETRY_DELAY_MS: "18000"
+          FETCH_MAX_ATTEMPTS: "8"
+          REQUEST_TIMEOUT_MS: "25000"
+        run: npm run sync:workable
+
+      - name: Upload workable checkpoint artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: workable-sync-checkpoint
+          path: |
+            sources.csv
+            source_performance.csv
+          if-no-files-found: error
+          retention-days: 3

@@ -1,0 +1,82 @@
+name: Sync pipeline to Supabase
+
+# Upserts company_list from committed CSVs; syncs pipeline_extracted_jobs when data/extracted_jobs_clean.json exists (skipped in CI if missing — gitignored).
+# Requires SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY (same secrets as Daily Job Sync).
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/sync-pipeline-to-supabase.yml"
+      - "scripts/pipeline/syncCompanyAndJobsToSupabase.mjs"
+      - "data/career_source_registry.csv"
+      - "data/source_routing_table.csv"
+      - "data/extracted_jobs_clean.json"
+  schedule:
+    # Weekly: Sunday 06:00 UTC
+    - cron: "0 6 * * 0"
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate Supabase secrets before sync
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          node -e '
+          const url = process.env.SUPABASE_URL || "";
+          const key = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+          if (!url) {
+            console.error("Missing SUPABASE_URL secret.");
+            process.exit(1);
+          }
+          if (!key) {
+            console.error("Missing SUPABASE_SERVICE_ROLE_KEY secret.");
+            process.exit(1);
+          }
+          if (key.startsWith("sb_publishable_")) {
+            console.error("SUPABASE_SERVICE_ROLE_KEY is a publishable key, not a service-role key.");
+            process.exit(1);
+          }
+          if (key.startsWith("eyJ")) {
+            try {
+              const payload = JSON.parse(Buffer.from(key.split(".")[1], "base64url").toString("utf8"));
+              const role = String(payload.role || "").toLowerCase();
+              if (role !== "service_role") {
+                console.error(`SUPABASE_SERVICE_ROLE_KEY jwt role is '${role}', expected 'service_role'.`);
+                process.exit(1);
+              }
+            } catch (err) {
+              console.error("Could not decode SUPABASE_SERVICE_ROLE_KEY JWT payload:", err.message || err);
+              process.exit(1);
+            }
+          } else {
+            console.log("Non-JWT Supabase secret key detected; continuing.");
+          }
+          console.log("Supabase key wiring check passed.");
+          '
+
+      - name: Sync company_list and pipeline_extracted_jobs
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/pipeline/syncCompanyAndJobsToSupabase.mjs

@@ -1,0 +1,349 @@
+{
+  "achievers": {
+    "logoDomain": "www.achievers.com"
+  },
+  "aerones": {
+    "logoDomain": "aerones.com"
+  },
+  "aerovect": {
+    "logoDomain": "www.aerovect.com"
+  },
+  "aevexaerospace": {
+    "displayName": "Aevex Aerospace",
+    "logoDomain": "www.aevex.com"
+  },
+  "airbound": {
+    "logoDomain": "www.airbound.co"
+  },
+  "alpineeagle": {
+    "logoDomain": "www.alpineeagle.com"
+  },
+  "alta-ares": {
+    "logoDomain": "www.altaaerospace.com"
+  },
+  "altentechnologyusa": {
+    "logoDomain": "altentechnology.com"
+  },
+  "anduril": {
+    "logoDomain": "www.anduril.com"
+  },
+  "anybotics": {
+    "logoDomain": "www.anybotics.com"
+  },
+  "aoc-global-services": {
+    "logoDomain": "www.aocglobalservices.com"
+  },
+  "appliedintuition": {
+    "logoDomain": "www.appliedintuition.com"
+  },
+  "arch-aerial-llc": {
+    "logoDomain": "www.archaerial.com"
+  },
+  "arxlight-ai": {
+    "logoDomain": "www.arxlight.ai"
+  },
+  "arxroboticsgmbh": {
+    "logoDomain": "arx-robotics.com"
+  },
+  "audinate": {
+    "logoDomain": "www.audinate.com"
+  },
+  "aureliussystems": {
+    "logoDomain": "www.aurelius-systems.com"
+  },
+  "aurorainnovation": {
+    "logoDomain": "aurora.tech"
+  },
+  "axon": {
+    "logoDomain": "www.axon.com"
+  },
+  "beta": {
+    "logoDomain": "beta.team"
+  },
+  "breaker": {
+    "logoDomain": "www.breaker.ai"
+  },
+  "brightai": {
+    "logoDomain": "www.bright.ai"
+  },
+  "brinc": {
+    "logoDomain": "www.brincdrones.com"
+  },
+  "cabonorte": {
+    "logoDomain": "www.cabonorte.com"
+  },
+  "capstan-medical": {
+    "logoDomain": "www.capstanmedical.com"
+  },
+  "compound-eye": {
+    "logoDomain": "www.compoundeye.com"
+  },
+  "cordtechnologies": {
+    "logoDomain": "www.cordtechnologies.com"
+  },
+  "cx2": {
+    "logoDomain": "www.cx2.ai"
+  },
+  "d-fend-solutions": {
+    "logoDomain": "www.d-fendsolutions.com"
+  },
+  "delair": {
+    "logoDomain": "delair.aero"
+  },
+  "delian": {
+    "logoDomain": "www.delian.ai"
+  },
+  "destinus": {
+    "logoDomain": "www.destinus.com"
+  },
+  "distributed-spectrum": {
+    "logoDomain": "www.distributedspectrum.com"
+  },
+  "dronedeploy": {
+    "logoDomain": "www.dronedeploy.com"
+  },
+  "droneshield": {
+    "logoDomain": "www.droneshield.com"
+  },
+  "droneup": {
+    "logoDomain": "droneup.com"
+  },
+  "emesent": {
+    "logoDomain": "emesent.com"
+  },
+  "fiducial": {
+    "logoDomain": "www.fiducial.com"
+  },
+  "field-ai": {
+    "logoDomain": "www.fieldai.com"
+  },
+  "flyability": {
+    "logoDomain": "flyability.com"
+  },
+  "freedom-solar-power": {
+    "logoDomain": "freedomsolarpower.com"
+  },
+  "gatherai": {
+    "logoDomain": "www.gather.ai"
+  },
+  "gatikaiinc": {
+    "logoDomain": "gatik.ai"
+  },
+  "generalrobotics": {
+    "logoDomain": "www.generalrobotics.com"
+  },
+  "graymatter-robotics": {
+    "logoDomain": "www.graymatter-robotics.com"
+  },
+  "harmattan-ai": {
+    "logoDomain": "www.harmattan.ai"
+  },
+  "havocai": {
+    "logoDomain": "www.havocai.com"
+  },
+  "hermeus": {
+    "logoDomain": "www.hermeus.com"
+  },
+  "indiecampers": {
+    "logoDomain": "www.indiecampers.com"
+  },
+  "jobgether": {
+    "logoDomain": "www.jobgether.com"
+  },
+  "kestrel-intelligence": {
+    "logoDomain": "www.kestrelintel.com"
+  },
+  "lat": {
+    "logoDomain": "www.lat.ai"
+  },
+  "ltaresearch": {
+    "logoDomain": "ltaresearch.com"
+  },
+  "mach": {
+    "logoDomain": "flymach.com"
+  },
+  "make-rain": {
+    "logoDomain": "www.makerain.com"
+  },
+  "marcohire": {
+    "logoDomain": "www.marcohire.com"
+  },
+  "matter-intelligence": {
+    "logoDomain": "www.matterintelligence.ai"
+  },
+  "matternet": {
+    "logoDomain": "mttr.net"
+  },
+  "maverick-drone-systems": {
+    "logoDomain": "www.maverickdronesystems.com"
+  },
+  "merlinlabs": {
+    "logoDomain": "merlinlabs.com"
+  },
+  "mirai-robotics": {
+    "logoDomain": "www.mirairobotics.com"
+  },
+  "mongodb": {
+    "logoDomain": "www.mongodb.com"
+  },
+  "morsecorp": {
+    "logoDomain": "www.morsecorp.com"
+  },
+  "mythic-ai": {
+    "logoDomain": "www.mythic.ai"
+  },
+  "niantic-spatial": {
+    "logoDomain": "nianticspatial.com"
+  },
+  "noda-ai": {
+    "logoDomain": "www.noda.ai"
+  },
+  "nomagic": {
+    "logoDomain": "www.nomagic.ai"
+  },
+  "northvectordynamics": {
+    "logoDomain": "www.northvectordynamics.com"
+  },
+  "odys-aviation": {
+    "logoDomain": "odysaviation.com"
+  },
+  "onhires": {
+    "logoDomain": "www.onhires.com"
+  },
+  "orbaerospace": {
+    "logoDomain": "www.orbaerospace.com"
+  },
+  "palantir": {
+    "logoDomain": "www.palantir.com"
+  },
+  "persona-ai": {
+    "logoDomain": "www.persona.ai"
+  },
+  "pivotal": {
+    "logoDomain": "www.pivotal.aero"
+  },
+  "point-one-navigation": {
+    "logoDomain": "pointonenav.com"
+  },
+  "poseidonaero": {
+    "logoDomain": "www.poseidonaero.com"
+  },
+  "pyka": {
+    "logoDomain": "www.flypyka.com"
+  },
+  "realmalliance": {
+    "logoDomain": "www.realmalliance.com"
+  },
+  "reliable-robotics": {
+    "logoDomain": "reliable.co"
+  },
+  "revealtech": {
+    "logoDomain": "www.revealtech.ai"
+  },
+  "roadrunner-studios": {
+    "logoDomain": "www.roadrunnerstudios.com"
+  },
+  "robin-radar": {
+    "logoDomain": "www.robinradar.com"
+  },
+  "rvi": {
+    "logoDomain": "www.rvi.ai"
+  },
+  "saronic": {
+    "logoDomain": "www.saronic.com"
+  },
+  "se3": {
+    "logoDomain": "www.se3.ai"
+  },
+  "sentinel-eagle": {
+    "logoDomain": "www.sentineleagle.com"
+  },
+  "serverobotics": {
+    "logoDomain": "www.serverobotics.com"
+  },
+  "sesai": {
+    "logoDomain": "sesai.ai"
+  },
+  "shield-ai": {
+    "logoDomain": "shield.ai"
+  },
+  "skydio": {
+    "logoDomain": "www.skydio.com"
+  },
+  "skysafe": {
+    "logoDomain": "www.skysafe.io"
+  },
+  "skyways": {
+    "logoDomain": "www.skyways.com"
+  },
+  "spacex": {
+    "logoDomain": "www.spacex.com"
+  },
+  "spear-ai": {
+    "logoDomain": "www.spear.ai"
+  },
+  "sphere-defense": {
+    "logoDomain": "www.sphere.defense"
+  },
+  "stand-insurance": {
+    "logoDomain": "www.standinsurance.com"
+  },
+  "stealth-startup": {
+    "logoDomain": "www.stealthstartup.com"
+  },
+  "swan": {
+    "logoDomain": "www.swan.ai"
+  },
+  "swarmer": {
+    "logoDomain": "www.swarmer.ai"
+  },
+  "terraformation": {
+    "logoDomain": "www.terraformation.com"
+  },
+  "threattec": {
+    "logoDomain": "www.threattec.com"
+  },
+  "treeswift": {
+    "logoDomain": "www.treeswift.com"
+  },
+  "true-anomaly": {
+    "logoDomain": "www.trueanomaly.space"
+  },
+  "tsmg": {
+    "logoDomain": "www.tsmg.io"
+  },
+  "tycho-ai": {
+    "logoDomain": "www.tycho.ai"
+  },
+  "unitx-labs": {
+    "logoDomain": "www.unitxlabs.com"
+  },
+  "venus-aerospace": {
+    "logoDomain": "www.venusaero.com"
+  },
+  "verkor": {
+    "logoDomain": "www.verkor.com"
+  },
+  "voyant-photonics": {
+    "logoDomain": "www.voyantphotonics.com"
+  },
+  "wadetrim": {
+    "logoDomain": "www.wadetrim.com"
+  },
+  "weedmaps77": {
+    "logoDomain": "weedmaps.com"
+  },
+  "wingtra": {
+    "logoDomain": "wingtra.com"
+  },
+  "woolpert": {
+    "logoDomain": "www.woolpert.com"
+  },
+  "zipline": {
+    "logoDomain": "www.flyzipline.com"
+  },
+  "zone5-technologies": {
+    "displayName": "Zone 5 Technologies",
+    "logoDomain": "www.zone5tech.com"
+  }
+}

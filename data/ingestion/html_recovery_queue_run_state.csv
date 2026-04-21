@@ -1,0 +1,4 @@
+﻿"company_key","company_name","careers_url","pipeline_queue_status","last_extraction_at","extraction_status","jobs_found_count","requires_browser_render","failure_reason","recommended_next_action","notes"
+"recovery_html__flyability__54eafa03","Flyability","https://www.flyability.com/jobs","scraped","2026-04-12T17:15:31.978Z","jobs_found","1","false","","promote_html_source","yield=ok/has_jobs;per_status=ok;blocker=none"
+"recovery_html__skydio__ef32fbd8","Skydio","https://www.skydio.com/careers","scraped","2026-04-12T17:15:31.978Z","jobs_found","29","false","","promote_html_source","yield=ok/has_jobs;per_status=ok;blocker=none"
+"recovery_html__wing__9326ac34","Wing","https://wing.com/careers","scraped","2026-04-12T17:15:31.978Z","jobs_found","1","false","","promote_html_source","yield=ok/has_jobs;per_status=ok;blocker=none"

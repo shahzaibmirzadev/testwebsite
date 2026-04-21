@@ -1,0 +1,15 @@
+{
+  "jobCompanySlugToPrimarySlug": {
+    "anduril-industries": "anduril",
+    "gatik-ai": "gatikaiinc",
+    "aevex-aerospace": "aevexaerospace",
+    "zone5technologies": "zone5-technologies",
+    "arx-robotics-gmbh": "arxroboticsgmbh",
+    "arx-robotics": "arxroboticsgmbh",
+    "beta-technologies": "beta",
+    "flyability-elios-team": "flyability",
+    "reliable": "reliable-robotics",
+    "ses-ai": "sesai",
+    "mach-industries": "mach"
+  }
+}
