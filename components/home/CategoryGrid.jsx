@@ -246,7 +246,7 @@ export default function CategoryGrid({
 
   return (
     <section className={"border-y border-[rgba(91,79,232,0.1)] bg-[#FFFFFF] py-8 sm:py-10"} aria-labelledby="browse-cat-heading" data-home-scroll>
-      <div className={"[max-width:1120px] [margin:0_auto] [padding:0_20px] [transition:max-width_0.48s_cubic-bezier(0.4,_0,_0.2,_1)]"}>
+      <div className={"[max-width:1120px] [margin:0_auto] [padding:0_20px] [transition:max-width_0.48s_cubic-bezier(0.4,_0,_0.2,_1)] min-[1024px]:[max-width:min(1480px,_calc(100vw_-_40px))]"}>
         <div className={"mb-4 grid gap-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end"}>
           <div>
             <p className="m-0 text-xs font-black uppercase tracking-[0.12em] text-[#5B4FE8]">Explore the market</p>

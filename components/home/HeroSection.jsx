@@ -36,13 +36,14 @@ export default function HeroSection({ children }) {
         }}
         aria-hidden="true"
       />
-      <div className="absolute left-1/2 top-0 h-[560px] w-[min(1080px,94vw)] -translate-x-1/2 rounded-b-[36px] border-x border-b border-[rgba(91,79,232,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.74)_0%,rgba(255,255,255,0.24)_100%)]" aria-hidden="true" />
-      <div className="pointer-events-none absolute right-[-52px] top-[42px] z-20 w-[230px] rotate-45 border border-[rgba(91,79,232,0.16)] bg-[#EDE9FF] py-2 text-center text-[11px] font-black uppercase tracking-[0.12em] text-[#1A1160] shadow-[0_16px_34px_rgba(91,79,232,0.16)] sm:right-[-46px] sm:top-[52px]">
-        {updatedBadgeText}
-      </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-[1180px] px-4 pb-12 pt-12 sm:px-6 sm:pt-16 lg:px-8 lg:pb-18 lg:pt-24">
-        <section className="mx-auto max-w-[1040px] text-center">
+      <div className="relative z-10 mx-auto w-full max-w-[1120px] px-5 pb-12 pt-12 transition-[max-width] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] sm:pt-16 min-[1024px]:max-w-[min(1480px,calc(100vw_-_40px))] lg:pb-18 lg:pt-24">
+        <div className="absolute left-1/2 top-0 h-[560px] w-[min(1080px,94vw)] -translate-x-1/2 overflow-hidden rounded-b-[36px] border-x border-b border-[rgba(91,79,232,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.74)_0%,rgba(255,255,255,0.24)_100%)]" aria-hidden="true">
+          <div className="absolute right-[-70px] top-[52px] z-20 w-[290px] rotate-45 border border-[rgba(91,79,232,0.16)] bg-[#EDE9FF] py-2 text-center text-[11px] font-black uppercase tracking-[0.12em] text-[#1A1160] shadow-[0_16px_34px_rgba(91,79,232,0.16)] sm:right-[-58px] sm:top-[58px]">
+            {updatedBadgeText}
+          </div>
+        </div>
+        <section className="relative mx-auto max-w-[1040px] text-center">
           <h1 className="mt-1 mb-0 px-[0.04em] pb-[0.08em] text-5xl font-black leading-[1] tracking-[-0.05em] text-[#1C1C1A] sm:text-6xl lg:text-[5.3rem]">
             <span className="block overflow-visible">
               <span className="inline-block" data-home-line>Find the right</span>
@@ -80,7 +81,7 @@ export default function HeroSection({ children }) {
         </section>
 
         {children ? (
-          <div className="relative z-20 mx-auto mt-12 max-w-[1120px] overflow-visible sm:mt-14" data-home-hero-reveal>
+          <div className="relative z-20 mx-auto mt-12 w-full overflow-visible sm:mt-14" data-home-hero-reveal>
             {children}
           </div>
         ) : null}
